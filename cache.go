@@ -5,13 +5,13 @@ import (
 )
 
 type CacheItem struct {
-	value  string
+	value   string
 	expires bool
 	timeout time.Time
 }
 
 func (ci CacheItem) isExpired() bool {
-	if (!ci.expires) {
+	if !ci.expires {
 		return false
 	} else {
 		return ci.timeout.UnixMilli() < time.Now().UnixMilli()
@@ -28,8 +28,8 @@ func NewCache() Cache {
 
 func (c Cache) Get(key string) (string, bool) {
 	item, exists := c.cache[key]
-	if (!exists || item.isExpired()) {
-		return item.value, false
+	if !exists || item.isExpired() {
+		return "", false
 	}
 	return item.value, true
 }
@@ -43,7 +43,7 @@ func (c Cache) Keys() []string {
 	keys := make([]string, 0, len(c.cache))
 	for k := range c.cache {
 		item := c.cache[k]
-		if (item.isExpired()) {
+		if item.isExpired() {
 			continue
 		}
 		keys = append(keys, k)
